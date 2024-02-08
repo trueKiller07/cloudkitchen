@@ -1,0 +1,14 @@
+#step 1: build the image
+docker build -t producer-consumer .
+#step 2: start the container
+docker compose -f docker-compose.yaml up -d
+
+docker exec -it kafka /bin/sh
+
+kafka-console-consumer.sh --topic orders-topic --from-beginning --bootstrap-server localhost:9092
+kafka-console-producer.sh --topic orders-topic --bootstrap-server localhost:9092
+
+kafka-topics.sh --bootstrap-server localhost:9092 orders-topic --describe
+kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic orders-topic
+
+docker logs -f producer-consumer
