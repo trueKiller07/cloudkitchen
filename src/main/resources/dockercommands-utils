@@ -1,14 +1,23 @@
 #step 1: build the image
 docker build -t producer-consumer .
+docker build -t spring-kafka-docker .
 #step 2: start the container
 docker compose -f docker-compose.yaml up -d
 
 docker exec -it kafka /bin/sh
 
 kafka-console-consumer.sh --topic orders-topic --from-beginning --bootstrap-server localhost:9092
+kafka-console-consumer.sh --topic orders-topic --bootstrap-server localhost:9092 --from-beginning --consumer-property group.id=test1
 kafka-console-producer.sh --topic orders-topic --bootstrap-server localhost:9092
 
 kafka-topics.sh --bootstrap-server localhost:9092 orders-topic --describe
 kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic orders-topic
+kafka-consumer-groups.sh --describe --group my-group-id --bootstrap-server localhost:9092
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --all-groups
 
+kafka-configs.sh --bootstrap-server localhost:9092 --alter --entity-type topics --entity-name configured-topic --add-config min.insync.replicas=2
+kafka-configs.sh --bootstrap-server localhost:9092 --alter --entity-type brokers --entity-default --add-config min.insync.replicas=2
+kafka-configs.sh --bootstrap-server localhost:9092 --entity-type brokers --describe --all
 docker logs -f producer-consumer
+
+kafka-topics.sh --bootstrap-server localhost:9092 __consumer_offsets --describe
