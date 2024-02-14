@@ -17,6 +17,8 @@ services:
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
     networks:
       - spring-kafka-network
+    volumes:
+      - /Users/sameersharma/IdeaProjects/data/kafka:/bitnami/kafka/data
 
   producer:
     image: spring-kafka-docker
@@ -30,6 +32,8 @@ services:
       - spring-kafka-network
     depends_on:
       - kafka
+    volumes:
+      - /Users/sameersharma/IdeaProjects/data/app:/logs/cloudkitchen
 
 networks:
   spring-kafka-network:

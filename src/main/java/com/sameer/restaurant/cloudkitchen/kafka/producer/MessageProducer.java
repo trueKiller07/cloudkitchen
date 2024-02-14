@@ -1,5 +1,6 @@
 package com.sameer.restaurant.cloudkitchen.kafka.producer;
 
+import com.sameer.restaurant.cloudkitchen.dto.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -8,10 +9,10 @@ import org.springframework.stereotype.Component;
 public class MessageProducer {
 
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaTemplate<String, Order> kafkaTemplate;
 
-    public void sendMessage(String topic, String message) {
-        kafkaTemplate.send(topic, message);
+    public void sendMessage(String topic, String key, Order order) {
+        kafkaTemplate.send(topic, key, order);
     }
 
 }

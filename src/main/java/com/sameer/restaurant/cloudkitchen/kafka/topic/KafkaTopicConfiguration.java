@@ -32,7 +32,7 @@ public class KafkaTopicConfiguration {
     public NewTopic topicExample2() {
         return TopicBuilder.name("orders-topic-test")
                 .partitions(5)
-                .replicas(2)
+                .replicas(1)
                 .build();
     }
 }
